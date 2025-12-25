@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Trappola Del Gusto Ristorante Pizzeria</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#0f1621;
+      --muted:#9fb0c3;
+      --text:#eaf2ff;
+      --accent:#7c5cff;
+      --accent2:#22c55e;
+      --border:rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 600px at 10% 0%, rgba(124,92,255,.25), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(34,197,94,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:980px; margin:0 auto; padding:24px 18px 60px;}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width:900px){ .hero{grid-template-columns:1fr;} }
+    .cover{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      overflow:hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      min-height: 280px;
+      position:relative;
+    }
+    .cover img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(1.05) contrast(1.02);
+      opacity:.92;
+    }
+    .cover::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(90deg, rgba(11,15,20,.2), rgba(11,15,20,.75));
+      pointer-events:none;
+    }
+    .info{
+      position:absolute; left:18px; right:18px; bottom:18px;
+      z-index:2;
+    }
+    .title{font-size:28px; font-weight:800; letter-spacing:-.02em; margin:0 0 6px;}
+    .sub{display:flex; flex-wrap:wrap; gap:10px; color:var(--muted); font-size:14px;}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      color: var(--text);
+      font-size:13px;
+    }
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(15,22,33,.75);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card h3{margin:0 0 10px; font-size:16px; color:var(--text);}
+    .muted{color:var(--muted)}
+    .btns{display:grid; gap:10px; margin-top:12px;}
+    .btn{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:12px 12px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      transition:.15s transform, .15s background;
+      font-weight:600;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.09);}
+    .btn .tag{color:var(--muted); font-weight:500; font-size:12px;}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+
+    .badges{display:flex; flex-wrap:wrap; gap:10px;}
+    .badge{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(124,92,255,.12);
+      color:#e9e4ff;
+      font-size:13px;
+      font-weight:600;
+    }
+    .badge.ok{background: rgba(34,197,94,.12); color:#ddffe7;}
+    .hours .row{
+      display:flex; justify-content:space-between;
+      padding:10px 0;
+      border-bottom:1px dashed rgba(255,255,255,.08);
+      font-size:14px;
+    }
+    .hours .row:last-child{border-bottom:none}
+    .day{color:var(--muted)}
+    .sectionTitle{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+    .mini{font-size:12px; color:var(--muted)}
+    .footer{
+      margin-top:26px;
+      color: rgba(255,255,255,.5);
+      font-size:12px;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="hero">
+      <div class="cover">
+        <img src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwSx9E8OijqOXG-PegVuaLy8okqGWSkbzwNzKDYVBkSFp0CO_UoE4-DT5aPUOXjOmY36MFgP-wibs_CX62Uq4s8aeLX3kBYXAEOYy-RhaURRFBvylSBlIeOj9_pHXpV_t_h_SdTYw=w408-h544-k-no" alt="La Trappola Del Gusto Ristorante Pizzeria" />
+        <div class="info">
+          <h1 class="title">La Trappola Del Gusto Ristorante Pizzeria</h1>
+          <div class="sub">
+            <span class="pill">🍽️ Ristorante</span>
+            <span class="pill">💶 10-20 €</span>
+            <span class="pill">⭐ 4.5 · 90 recensioni</span>
+          </div>
+          <div style="margin-top:10px" class="muted">Via della Stazione di Cesano, 454, 00123 Roma RM, Italia</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h3>Contatti</h3>
+          <div class="mini">MVP LeggiMenu</div>
+        </div>
+
+        <div class="btns">
+          
+            <a class="btn" href="tel:+39063037800">
+              <span>📞 Chiama</span>
+              <span class="tag">+39063037800</span>
+            </a>
+
+          
+            <div class="btn" style="opacity:.55; cursor:not-allowed">
+              <span>✉️ Email</span>
+              <span class="tag">non disponibile</span>
+            </div>
+          
+
+          
+
+          
+            <a class="btn" href="https://www.google.com/maps/search/?api=1&query=La%20Trappola%20Del%20Gusto%20Ristorante%20Pizzeria&query_place_id=ChIJa303PFNFLxMRpVeMU0l5FHk" target="_blank" rel="noopener">
+              <span>📍 Apri su Google Maps</span>
+              <span class="tag">indicazioni</span>
+            </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h3>Servizi</h3>
+          <div class="mini">quello che offre</div>
+        </div>
+        
+          <div class="muted">Non disponibili</div>
+        
+      </div>
+
+      <div class="card">
+        <div class="sectionTitle">
+          <h3>Orari</h3>
+          <div class="mini">apertura</div>
+        </div>
+        <div class="muted">Non disponibili</div>
+        
+        
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="sectionTitle">
+        <h3>Menu digitale</h3>
+        <div class="mini">in arrivo</div>
+      </div>
+      <div class="muted">Qui puoi agganciare il menu (PDF, JSON, o scraping da sito) quando vuoi.</div>
+    </div>
+
+    <div class="footer">© 2025 · Generato automaticamente</div>
+  </div>
+</body>
+</html>
