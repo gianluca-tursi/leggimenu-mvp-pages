@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Menù digitali</title>
+  <style>
+    :root{
+      --bg:#f4f5f7; --card:#fff; --text:#111827; --muted:#6b7280;
+      --border:rgba(0,0,0,.08); --shadow:0 10px 30px rgba(0,0,0,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);
+      background:linear-gradient(#fff,var(--bg));}
+    .wrap{max-width:980px;margin:0 auto;padding:22px 16px 40px;}
+    h1{margin:0 0 6px;font-size:22px;font-weight:900}
+    p{margin:0 0 18px;color:var(--muted);font-weight:700}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+    .card{
+      display:block; background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+      text-decoration:none; color:inherit;
+    }
+    .card img{width:100%;height:160px;object-fit:cover;display:block}
+    .ph{width:100%;height:160px;background:rgba(0,0,0,.06)}
+    .cbody{padding:14px}
+    .ctitle{font-weight:900;font-size:15px;line-height:1.2}
+    .csub{margin-top:6px;color:var(--muted);font-weight:800;font-size:12px;text-transform:uppercase}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Menù digitali</h1>
+    <p>Seleziona un ristorante</p>
+    <div class="grid">
+      
+      <a class="card" href="la-trappola-del-gusto.html">
+        <img src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwSx9E8OijqOXG-PegVuaLy8okqGWSkbzwNzKDYVBkSFp0CO_UoE4-DT5aPUOXjOmY36MFgP-wibs_CX62Uq4s8aeLX3kBYXAEOYy-RhaURRFBvylSBlIeOj9_pHXpV_t_h_SdTYw=w408-h544-k-no" alt="La Trappola Del Gusto " loading="lazy" />
+        <div class="cbody">
+          <div class="ctitle">La Trappola Del Gusto </div>
+          <div class="csub">pizzerie</div>
+        </div>
+      </a>
+    
+    </div>
+  </div>
+</body>
+</html>
