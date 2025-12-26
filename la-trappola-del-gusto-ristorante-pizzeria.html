@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="format-detection" content="telephone=no, email=no, address=no"/>
+
+  <title>La Trappola Del Gusto Ristorante Pizzeria - Menu</title>
+  <meta name="description" content="Menu digitale di La Trappola Del Gusto Ristorante Pizzeria"/>
+
+  <style>
+    :root{
+      --bg:#f4f5f7;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:rgba(0,0,0,.06);
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --shadowS: 0 6px 18px rgba(0,0,0,.08);
+      --radius: 18px;
+
+      --highlight:#000000;
+      --pill:#ffffff;
+      --pillText:#111827;
+      --pillActiveBg:#000;
+      --pillActiveText:#fff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background: linear-gradient(#fff, var(--bg));
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width: 980px; margin:0 auto; padding: 0 16px;}
+
+    .header{
+      position:fixed; top:0; left:0; right:0;
+      height:64px;
+      display:flex; align-items:center;
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+      z-index:60;
+    }
+    .header .inner{
+      width:100%;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .brand-badge{
+      width:34px; height:34px; border-radius:10px;
+      background: var(--highlight);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-weight:900; font-size:13px;
+      box-shadow: var(--shadowS);
+    }
+    .header-actions{display:flex; align-items:center; gap:10px;}
+    .icon-btn{
+      width:38px; height:38px; border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      background:#fff;
+      border:1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+      cursor:pointer;
+    }
+    .icon{font-size:18px; line-height:1}
+    .header-clear{height:72px;}
+
+    .hero{
+      border-radius: var(--radius);
+      overflow:hidden;
+      position:relative;
+      height: 220px;
+      background:#111;
+      box-shadow: var(--shadowS);
+      margin-top: 8px;
+    }
+    .hero img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+      transform: scale(1.02);
+      filter: saturate(1.05);
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.72));
+    }
+    .hero-title{
+      position:absolute; left:16px; right:16px; bottom:16px;
+      color:#fff;
+      display:flex; flex-direction:column; gap:6px;
+      z-index:2;
+      text-align:center;
+    }
+    .hero-title h1{
+      margin:0;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing:.3px;
+      text-transform: uppercase;
+    }
+    .hero-sub{
+      font-size: 13px;
+      opacity:.92;
+      color: rgba(255,255,255,.92);
+    }
+
+    /* ONLY MENU CATEGORY BAR */
+    .pillbar.menu-only{
+      position: sticky;
+      top: 64px;              /* sotto header */
+      z-index:55;
+      padding: 10px 0 8px;
+      background: linear-gradient(rgba(255,255,255,.97), rgba(255,255,255,.85));
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      margin: 12px -16px 12px;
+    }
+    .pills{
+      display:flex;
+      gap:10px;
+      overflow:auto;
+      padding: 8px 2px;
+      scroll-snap-type: x mandatory;
+    }
+    .pill{
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--pill);
+      color: var(--pillText);
+      border:1px solid var(--border);
+      box-shadow: 0 6px 16px rgba(0,0,0,.05);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      scroll-snap-align:start;
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .pill.active{
+      background: var(--pillActiveBg);
+      color: var(--pillActiveText);
+      border-color: rgba(255,255,255,.2);
+    }
+
+    /* MENU */
+    .menu{padding: 0 0 18px;}
+    .menu-cat{padding: 10px 0 0; scroll-margin-top: 120px;} /* evita che venga coperta da header+pillbar */
+    .menu-cat h3{
+      margin: 10px 0 10px;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing:.3px;
+      text-align:center;
+      color:#111;
+    }
+    .menu-item{
+      padding: 12px 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background:#fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      margin-bottom: 10px;
+    }
+    .menu-row{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap: 10px;
+    }
+    .menu-name{
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1.25;
+      flex: 1;
+    }
+    .menu-price{
+      font-weight: 900;
+      font-size: 13px;
+      white-space: nowrap;
+      color:#111;
+    }
+    .menu-desc{
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+    .muted{color:var(--muted)}
+
+    /* MODAL */
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.45);
+      display:none;
+      z-index:80;
+      padding: 14px;
+    }
+    .modal{
+      max-width: 720px;
+      margin: 70px auto 0;
+      background:#fff;
+      border-radius: 18px;
+      box-shadow: var(--shadowS);
+      overflow:hidden;
+      border:1px solid var(--border);
+    }
+    .modal-head{
+      padding: 14px 16px;
+      display:flex; align-items:center; justify-content:space-between;
+      border-bottom:1px solid var(--border);
+      background: #fff;
+    }
+    .modal-head h3{margin:0; font-size: 16px; font-weight: 900;}
+    .close{
+      width:36px; height:36px; border-radius: 12px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-size:18px;
+    }
+    .modal-body{padding: 16px;}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-weight:900;
+      cursor:pointer;
+      width:100%;
+    }
+    .btn.primary{background:#111; color:#fff; border-color: rgba(0,0,0,0);}
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="container inner">
+      <div class="brand">
+        <div class="brand-badge">LM</div>
+        <div style="display:flex; flex-direction:column; line-height:1.1;">
+          <span style="font-size:13px; font-weight:900;">Menu</span>
+          <span style="font-size:11px; color:var(--muted); font-weight:800;">La Trappola Del Gusto Ristorante Pizzeria</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a class="icon-btn" href="https://tegliaetegame.it/" target="_blank" aria-label="Sito web" title="Sito web"><span class="icon">🌐</span></a>
+        <button class="icon-btn" onclick="openModal('contacts')" aria-label="Contatti" title="Contatti"><span class="icon">ℹ️</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-clear"></div>
+
+  <div class="container">
+
+    <section class="hero" id="top">
+      <img src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwSx9E8OijqOXG-PegVuaLy8okqGWSkbzwNzKDYVBkSFp0CO_UoE4-DT5aPUOXjOmY36MFgP-wibs_CX62Uq4s8aeLX3kBYXAEOYy-RhaURRFBvylSBlIeOj9_pHXpV_t_h_SdTYw=w408-h544-k-no" alt="Copertina La Trappola Del Gusto Ristorante Pizzeria" onerror="this.style.display='none'"/>
+      <div class="hero-title">
+        <h1>La Trappola Del Gusto Ristorante Pizzeria</h1>
+        <div class="hero-sub">
+          pizzerie
+          
+           · ⭐ 4.5
+           (90 recensioni)
+        </div>
+      </div>
+    </section>
+
+    
+    <div class="pillbar menu-only" id="menuCatBar">
+      <div class="pills" id="menuCatPills">
+        <div class="pill active" data-target="cat-pizze-rosse">PIZZE Rosse</div><div class="pill " data-target="cat-pizze-bianche">PIZZE Bianche</div><div class="pill " data-target="cat-fritti-classici">FRITTI Classici</div><div class="pill " data-target="cat-pizze-fritte">PIZZE Fritte</div><div class="pill " data-target="cat-verdure-fritte">VERDURE Fritte</div><div class="pill " data-target="cat-tavola-calda">Tavola Calda</div>
+      </div>
+    </div>
+
+    <div class="menu">
+      
+      <div class="menu-cat" id="cat-pizze-rosse" data-cat="cat-pizze-rosse">
+        <h3>PIZZE Rosse</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Margherita</div>
+            <div class="menu-price">€2,50</div>
+          </div>
+          <div class="menu-desc">Pomodoro, mozzarella, basilico</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Diavola</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">Pomodoro, mozzarella, salame piccante</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Capricciosa</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Pomodoro, mozzarella, prosciutto, funghi, carciofi</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Quattro Stagioni</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Pomodoro, mozzarella, prosciutto, funghi, olive, carciofi</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Marinara</div>
+            <div class="menu-price">€2,00</div>
+          </div>
+          <div class="menu-desc">Pomodoro, aglio, origano</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-pizze-bianche" data-cat="cat-pizze-bianche">
+        <h3>PIZZE Bianche</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Patate e Salsiccia</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">Mozzarella, patate, salsiccia</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Mortadella e Pistacchi</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Mozzarella, mortadella, granella di pistacchi</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Porchetta</div>
+            <div class="menu-price">€3,20</div>
+          </div>
+          <div class="menu-desc">Mozzarella, porchetta romana</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Quattro Formaggi</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Mozzarella, gorgonzola, parmigiano, fontina</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-fritti-classici" data-cat="cat-fritti-classici">
+        <h3>FRITTI Classici</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Supplì al Telefono</div>
+            <div class="menu-price">€1,50</div>
+          </div>
+          <div class="menu-desc">Riso, ragù e mozzarella filante</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Arancini Siciliani</div>
+            <div class="menu-price">€2,00</div>
+          </div>
+          <div class="menu-desc">Riso, ragù, piselli e mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Crocchette di Patate</div>
+            <div class="menu-price">€1,00</div>
+          </div>
+          <div class="menu-desc">Patate e mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Olive all&#039;Ascolana</div>
+            <div class="menu-price">€1,50</div>
+          </div>
+          <div class="menu-desc">Olive ripiene di carne</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Fiori di Zucca</div>
+            <div class="menu-price">€2,50</div>
+          </div>
+          <div class="menu-desc">Ripieni di alici e mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Baccalà Fritto</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">Filetti di baccalà croccanti</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-pizze-fritte" data-cat="cat-pizze-fritte">
+        <h3>PIZZE Fritte</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Pizza Fritta Classica</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">Pomodoro e mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Pizza Fritta Ripiena</div>
+            <div class="menu-price">€4,00</div>
+          </div>
+          <div class="menu-desc">Ricotta, salame, provola</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Calzone Fritto</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Prosciutto e mozzarella</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-verdure-fritte" data-cat="cat-verdure-fritte">
+        <h3>VERDURE Fritte</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Zucchine Fritte</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">A fette, croccanti</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Melanzane Fritte</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">A fette, dorate</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Carciofi Fritti</div>
+            <div class="menu-price">€4,50</div>
+          </div>
+          <div class="menu-desc">Alla giudia</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-tavola-calda" data-cat="cat-tavola-calda">
+        <h3>Tavola Calda</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Lasagne alla Bolognese</div>
+            <div class="menu-price">€7,00</div>
+          </div>
+          <div class="menu-desc">Sfoglia all&#039;uovo, ragù di carne, besciamella, parmigiano</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Parmigiana di Melanzane</div>
+            <div class="menu-price">€6,00</div>
+          </div>
+          <div class="menu-desc">Melanzane fritte, pomodoro, mozzarella, basilico</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Supplì al Telefono</div>
+            <div class="menu-price">€1,50</div>
+          </div>
+          <div class="menu-desc">Riso, ragù, mozzarella filante</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Arancini Siciliani</div>
+            <div class="menu-price">€2,50</div>
+          </div>
+          <div class="menu-desc">Riso, ragù, piselli, mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Pollo al Forno</div>
+            <div class="menu-price">€6,50</div>
+          </div>
+          <div class="menu-desc">Coscia di pollo, patate, rosmarino</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Pasta al Forno</div>
+            <div class="menu-price">€5,50</div>
+          </div>
+          <div class="menu-desc">Pasta, ragù, mozzarella, besciamella</div>
+        </div>
+      
+      </div>
+    
+    </div>
+  
+
+  </div>
+
+  <div class="modal-backdrop" id="modal-contacts">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Contatti</h3>
+        <button class="close" onclick="closeModal('contacts')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a class="btn primary" href="tel:39063037800">📞 Chiama</a>
+          <a class="btn" href="https://tegliaetegame.it/" target="_blank">🌐 Visita sito</a>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=La%20Trappola%20Del%20Gusto%20Ristorante%20Pizzeria&amp;query_place_id=ChIJa303PFNFLxMRpVeMU0l5FHk" target="_blank">📍 Apri Google Maps</a>
+          
+          <div class="muted" style="text-align:center; font-weight:800; font-size:12px;">Via della Stazione di Cesano, 454, 00123 Roma RM, Italia</div>
+        </div>
+        <p class="muted" style="margin-top:12px; text-align:center;">Creato su <b>leggimenu.it</b> (MVP)</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const pillbar = document.getElementById('menuCatBar');
+    const menuCatPills = Array.from(document.querySelectorAll('#menuCatPills .pill'));
+    const sections = Array.from(document.querySelectorAll('.menu-cat'));
+
+    function openModal(name){
+      document.getElementById('modal-' + name).style.display = 'block';
+    }
+    function closeModal(name){
+      document.getElementById('modal-' + name).style.display = 'none';
+    }
+    document.getElementById('modal-contacts').addEventListener('click', (e) => {
+      if(e.target.id === 'modal-contacts') closeModal('contacts');
+    });
+
+    // Click pill => scroll to section
+    menuCatPills.forEach(p => p.addEventListener('click', () => {
+      menuCatPills.forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+      const id = p.dataset.target;
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }));
+
+    // Active pill while scrolling
+    if('IntersectionObserver' in window && sections.length){
+      const obs = new IntersectionObserver((entries) => {
+        // prendi quello più visibile
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a,b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0))[0];
+
+        if(visible && visible.target){
+          const id = visible.target.getAttribute('data-cat');
+          if(id){
+            menuCatPills.forEach(x => x.classList.remove('active'));
+            const active = menuCatPills.find(x => x.dataset.target === id);
+            if(active) active.classList.add('active');
+          }
+        }
+      }, {
+        root: null,
+        threshold: [0.2, 0.35, 0.5, 0.65],
+        rootMargin: "-120px 0px -60% 0px"
+      });
+
+      sections.forEach(s => obs.observe(s));
+    }
+  </script>
+
+</body>
+</html>
