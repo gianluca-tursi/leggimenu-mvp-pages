@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="format-detection" content="telephone=no, email=no, address=no"/>
+
+  <title>La Trappola Del Gusto  - Menu Digitale</title>
+  <meta name="description" content="Scopri il menu digitale di La Trappola Del Gusto "/>
+
+  <style>
+    :root{
+      --bg:#f4f5f7;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:rgba(0,0,0,.06);
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --shadowS: 0 6px 18px rgba(0,0,0,.08);
+      --radius: 18px;
+
+      --highlight:#000000;
+      --accent:#16a34a;
+      --pill:#ffffff;
+      --pillText:#111827;
+      --pillActiveBg:#000;
+      --pillActiveText:#fff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background: linear-gradient(#fff, var(--bg));
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width: 980px; margin:0 auto; padding: 0 16px;}
+
+    .header{
+      position:fixed; top:0; left:0; right:0;
+      height:64px;
+      display:flex; align-items:center;
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+      z-index:50;
+    }
+    .header .inner{
+      width:100%;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .brand-badge{
+      width:34px; height:34px; border-radius:10px;
+      background: var(--highlight);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-weight:900; font-size:13px;
+      box-shadow: var(--shadowS);
+    }
+    .header-actions{display:flex; align-items:center; gap:10px;}
+    .icon-btn{
+      width:38px; height:38px; border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      background:#fff;
+      border:1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+      cursor:pointer;
+    }
+    .icon{font-size:18px; line-height:1}
+    .header-clear{height:72px;}
+
+    .hero{
+      border-radius: var(--radius);
+      overflow:hidden;
+      position:relative;
+      height: 240px;
+      background:#111;
+      box-shadow: var(--shadow);
+      margin-top: 8px;
+    }
+    .hero img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+      transform: scale(1.02);
+      filter: saturate(1.05);
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.72));
+    }
+    .hero-title{
+      position:absolute; left:16px; right:16px; bottom:16px;
+      color:#fff;
+      display:flex; flex-direction:column; gap:6px;
+      z-index:2;
+      text-align:center;
+    }
+    .hero-title h1{
+      margin:0;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing:.3px;
+      text-transform: uppercase;
+    }
+    .hero-sub{
+      font-size: 13px;
+      opacity:.92;
+      color: rgba(255,255,255,.92);
+    }
+
+    /* ✅ SOLO pillbar CATEGORIE (sticky sotto header) */
+    .pillbar{
+      position: sticky;
+      top: 64px;
+      z-index:40;
+      padding: 10px 0 6px;
+      background: linear-gradient(rgba(255,255,255,.95), rgba(255,255,255,.75));
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      margin: 0 0 12px;
+    }
+    /* ✅ FIX: padding laterale per evitare taglio prima pill */
+    .pillbar .pills{
+      display:flex;
+      gap:10px;
+      overflow:auto;
+      padding: 8px 16px; /* <-- importante */
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pill{
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--pill);
+      color: var(--pillText);
+      border:1px solid var(--border);
+      box-shadow: 0 6px 16px rgba(0,0,0,.05);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      scroll-snap-align:start;
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .pill.active{
+      background: var(--pillActiveBg);
+      color: var(--pillActiveText);
+      border-color: rgba(255,255,255,.2);
+    }
+
+    .card{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadowS);
+      border:1px solid var(--border);
+      overflow:hidden;
+      margin: 0 0 14px;
+    }
+    .card .content{padding: 16px;}
+    .card h2{
+      margin: 6px 0 6px;
+      font-size: 18px;
+      font-weight: 900;
+      text-align:center;
+    }
+    .card p{
+      margin: 0;
+      color: var(--muted);
+      text-align:center;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    /* MENU */
+    .menu{padding: 0 16px 16px;}
+    .menu-cat{padding: 10px 0 0;}
+    .menu-cat h3{
+      margin: 10px 0 10px;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing:.3px;
+      text-align:center;
+      color:#111;
+    }
+    .menu-item{
+      padding: 12px 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background:#fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      margin-bottom: 10px;
+    }
+    .menu-row{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap: 10px;
+    }
+    .menu-name{
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1.25;
+      flex: 1;
+    }
+    .menu-price{
+      font-weight: 900;
+      font-size: 13px;
+      white-space: nowrap;
+      color:#111;
+    }
+    .menu-desc{
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 16px;
+    }
+    .info-row{
+      display:flex; align-items:center; gap:10px;
+      padding: 12px 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+    }
+    .info-row .i{
+      width:36px; height:36px;
+      border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(0,0,0,.06);
+      font-size: 18px;
+    }
+    .info-row .t{
+      display:flex; flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    .info-row .label{font-size: 12px; color: var(--muted); font-weight:700;}
+    .info-row .value{
+      font-size: 14px; font-weight:800;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:6px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-size: 12px;
+      font-weight:800;
+      margin: 6px 6px 0 0;
+    }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-weight:900;
+      cursor:pointer;
+      width:100%;
+    }
+    .btn.primary{background: var(--accent); color:#fff; border-color: rgba(0,0,0,.0);}
+    .btn.dark{background:#111; color:#fff; border-color: rgba(0,0,0,.0);}
+
+    .footerbar{
+      position: fixed;
+      bottom: 0; left:0; right:0;
+      height: 68px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border);
+      display:flex; justify-content:center;
+      z-index:60;
+    }
+    .footerbar .inner{
+      width:min(980px, 100%);
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 10px 10px 12px;
+    }
+    .navitem{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      border-radius: 14px;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      cursor:pointer;
+      user-select:none;
+    }
+    .navitem.active{color:#000}
+    .navicon{font-size: 18px;}
+
+    .bottom-clear{height: 84px;}
+
+    @media (min-width: 760px){
+      .info-grid{grid-template-columns: 1fr 1fr;}
+      .hero{height: 280px;}
+      .footerbar .inner{grid-template-columns: repeat(5, 1fr);}
+    }
+
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.45);
+      display:none;
+      z-index:80;
+      padding: 14px;
+    }
+    .modal{
+      max-width: 720px;
+      margin: 70px auto 0;
+      background:#fff;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      border:1px solid var(--border);
+    }
+    .modal-head{
+      padding: 14px 16px;
+      display:flex; align-items:center; justify-content:space-between;
+      border-bottom:1px solid var(--border);
+      background: #fff;
+    }
+    .modal-head h3{margin:0; font-size: 16px; font-weight: 900;}
+    .close{
+      width:36px; height:36px; border-radius: 12px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-size:18px;
+    }
+    .modal-body{padding: 16px;}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="container inner">
+      <div class="brand">
+        <div class="brand-badge">LM</div>
+        <div style="display:flex; flex-direction:column; line-height:1.1;">
+          <span style="font-size:13px; font-weight:900;">Menu Digitale</span>
+          <span style="font-size:11px; color:var(--muted); font-weight:800;">MVP pagine statiche</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a class="icon-btn" href="https://tegliaetegame.it/" target="_blank" aria-label="Sito web" title="Sito web"><span class="icon">🌐</span></a>
+        <button class="icon-btn" onclick="openModal('contacts')" aria-label="Contatti" title="Contatti"><span class="icon">ℹ️</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-clear"></div>
+
+  <div class="container">
+
+    <section class="hero" id="top">
+      <img src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwSx9E8OijqOXG-PegVuaLy8okqGWSkbzwNzKDYVBkSFp0CO_UoE4-DT5aPUOXjOmY36MFgP-wibs_CX62Uq4s8aeLX3kBYXAEOYy-RhaURRFBvylSBlIeOj9_pHXpV_t_h_SdTYw=w408-h544-k-no" alt="Copertina La Trappola Del Gusto " onerror="this.style.display='none'"/>
+      <div class="hero-title">
+        <h1>La Trappola Del Gusto </h1>
+        <div class="hero-sub">
+          pizzerie
+          
+           · ⭐ 4.5
+           (90 recensioni)
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ RIMOSSO: pillbar Menu/Info/Orari/Servizi -->
+
+    <section id="section-menu" class="card">
+      <!-- ✅ RIMOSSO: blocco "Menu digitale / Categorie e prezzi del locale" -->
+      
+    <div class="pillbar menu-pillbar">
+      <div class="pills" id="menuCatPills">
+        <div class="pill" data-target="cat-pizze-rosse">PIZZE Rosse</div><div class="pill" data-target="cat-pizze-bianche">PIZZE Bianche</div><div class="pill" data-target="cat-fritti-classici">FRITTI Classici</div><div class="pill" data-target="cat-pizze-fritte">PIZZE Fritte</div><div class="pill" data-target="cat-verdure-fritte">VERDURE Fritte</div><div class="pill" data-target="cat-tavola-calda">Tavola Calda</div>
+      </div>
+    </div>
+    <div class="menu">
+      
+      <div class="menu-cat" id="cat-pizze-rosse">
+        <h3>PIZZE Rosse</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Margherita</div>
+            <div class="menu-price">€2,50</div>
+          </div>
+          <div class="menu-desc">Pomodoro, mozzarella, basilico</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Diavola</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">Pomodoro, mozzarella, salame piccante</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Capricciosa</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Pomodoro, mozzarella, prosciutto, funghi, carciofi</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Quattro Stagioni</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Pomodoro, mozzarella, prosciutto, funghi, olive, carciofi</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Marinara</div>
+            <div class="menu-price">€2,00</div>
+          </div>
+          <div class="menu-desc">Pomodoro, aglio, origano</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-pizze-bianche">
+        <h3>PIZZE Bianche</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Patate e Salsiccia</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">Mozzarella, patate, salsiccia</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Mortadella e Pistacchi</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Mozzarella, mortadella, granella di pistacchi</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Porchetta</div>
+            <div class="menu-price">€3,20</div>
+          </div>
+          <div class="menu-desc">Mozzarella, porchetta romana</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Quattro Formaggi</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Mozzarella, gorgonzola, parmigiano, fontina</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-fritti-classici">
+        <h3>FRITTI Classici</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Supplì al Telefono</div>
+            <div class="menu-price">€1,50</div>
+          </div>
+          <div class="menu-desc">Riso, ragù e mozzarella filante</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Arancini Siciliani</div>
+            <div class="menu-price">€2,00</div>
+          </div>
+          <div class="menu-desc">Riso, ragù, piselli e mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Crocchette di Patate</div>
+            <div class="menu-price">€1,00</div>
+          </div>
+          <div class="menu-desc">Patate e mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Olive all&#039;Ascolana</div>
+            <div class="menu-price">€1,50</div>
+          </div>
+          <div class="menu-desc">Olive ripiene di carne</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Fiori di Zucca</div>
+            <div class="menu-price">€2,50</div>
+          </div>
+          <div class="menu-desc">Ripieni di alici e mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Baccalà Fritto</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">Filetti di baccalà croccanti</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-pizze-fritte">
+        <h3>PIZZE Fritte</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Pizza Fritta Classica</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">Pomodoro e mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Pizza Fritta Ripiena</div>
+            <div class="menu-price">€4,00</div>
+          </div>
+          <div class="menu-desc">Ricotta, salame, provola</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Calzone Fritto</div>
+            <div class="menu-price">€3,50</div>
+          </div>
+          <div class="menu-desc">Prosciutto e mozzarella</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-verdure-fritte">
+        <h3>VERDURE Fritte</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Zucchine Fritte</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">A fette, croccanti</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Melanzane Fritte</div>
+            <div class="menu-price">€3,00</div>
+          </div>
+          <div class="menu-desc">A fette, dorate</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Carciofi Fritti</div>
+            <div class="menu-price">€4,50</div>
+          </div>
+          <div class="menu-desc">Alla giudia</div>
+        </div>
+      
+      </div>
+    
+      <div class="menu-cat" id="cat-tavola-calda">
+        <h3>Tavola Calda</h3>
+        
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Lasagne alla Bolognese</div>
+            <div class="menu-price">€7,00</div>
+          </div>
+          <div class="menu-desc">Sfoglia all&#039;uovo, ragù di carne, besciamella, parmigiano</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Parmigiana di Melanzane</div>
+            <div class="menu-price">€6,00</div>
+          </div>
+          <div class="menu-desc">Melanzane fritte, pomodoro, mozzarella, basilico</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Supplì al Telefono</div>
+            <div class="menu-price">€1,50</div>
+          </div>
+          <div class="menu-desc">Riso, ragù, mozzarella filante</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Arancini Siciliani</div>
+            <div class="menu-price">€2,50</div>
+          </div>
+          <div class="menu-desc">Riso, ragù, piselli, mozzarella</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Pollo al Forno</div>
+            <div class="menu-price">€6,50</div>
+          </div>
+          <div class="menu-desc">Coscia di pollo, patate, rosmarino</div>
+        </div>
+      
+        <div class="menu-item">
+          <div class="menu-row">
+            <div class="menu-name">Pasta al Forno</div>
+            <div class="menu-price">€5,50</div>
+          </div>
+          <div class="menu-desc">Pasta, ragù, mozzarella, besciamella</div>
+        </div>
+      
+      </div>
+    
+    </div>
+  
+    </section>
+
+    <section id="section-info" class="card">
+      <div class="content">
+        <h2>Informazioni</h2>
+        <p>Scopri contatti, orari e servizi del locale.</p>
+      </div>
+
+      <div class="info-grid">
+        
+        <a class="info-row" href="https://www.google.com/maps/search/?api=1&amp;query=La%20Trappola%20Del%20Gusto%20&amp;query_place_id=ChIJa303PFNFLxMRpVeMU0l5FHk" target="_blank">
+          <div class="i">📍</div>
+          <div class="t">
+            <div class="label">Indirizzo</div>
+            <div class="value">Via della Stazione di Cesano, 454, 00123 Roma RM, Italia</div>
+          </div>
+        </a>
+
+        
+        <a class="info-row" href="tel:39063037800">
+          <div class="i">📞</div>
+          <div class="t">
+            <div class="label">Telefono</div>
+            <div class="value">39063037800</div>
+          </div>
+        </a>
+
+        
+        <a class="info-row" href="https://tegliaetegame.it/" target="_blank">
+          <div class="i">🌐</div>
+          <div class="t">
+            <div class="label">Sito web</div>
+            <div class="value">tegliaetegame.it</div>
+          </div>
+        </a>
+
+        
+      </div>
+    </section>
+
+    <section id="section-orari" class="card">
+      <div class="content">
+        <h2>Orari</h2>
+        <p class="muted">Orari principali (da Google).</p>
+        <div id="hours" style="margin-top:12px;"></div>
+      </div>
+    </section>
+
+    <section id="section-servizi" class="card">
+      <div class="content">
+        <h2>Servizi</h2>
+        <p class="muted">Cose utili prima di arrivare.</p>
+        <div id="chips" style="margin-top:10px;"></div>
+      </div>
+    </section>
+
+    <div class="bottom-clear"></div>
+  </div>
+
+  <div class="footerbar">
+    <div class="inner">
+      <div class="navitem active" onclick="scrollToId('top')"><div class="navicon">📋</div><div>Menu</div></div>
+      <div class="navitem" onclick="scrollToId('section-orari')"><div class="navicon">🕒</div><div>Orari</div></div>
+      <div class="navitem" onclick="openModal('contacts')"><div class="navicon">ℹ️</div><div>Contatti</div></div>
+      <div class="navitem" onclick="sharePage()"><div class="navicon">🔗</div><div>Condividi</div></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-contacts">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Contatti</h3>
+        <button class="close" onclick="closeModal('contacts')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a class="btn primary" href="tel:39063037800">📞 Chiama</a>
+          <a class="btn" href="https://tegliaetegame.it/" target="_blank">🌐 Visita sito</a>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=La%20Trappola%20Del%20Gusto%20&amp;query_place_id=ChIJa303PFNFLxMRpVeMU0l5FHk" target="_blank">📍 Apri Google Maps</a>
+          
+        </div>
+        <p class="muted" style="margin-top:12px;">Creato su <b>leggimenu.it</b> (MVP)</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const openingHours = [{"day":"venerdì","hours":"09 to 22:30"},{"day":"sabato","hours":"09 to 22:30"},{"day":"domenica","hours":"09 to 22:30"},{"day":"lunedì","hours":"09 to 22:30"},{"day":"martedì","hours":"09 to 22:30"},{"day":"mercoledì","hours":"09 to 22:30"},{"day":"giovedì","hours":"09 to 22:30"}];
+    const additionalInfo = {"Servizio":[{"Asporto":true},{"Consumazione sul posto":true}],"In evidenza":[{"Ottimo caffè":true}],"Consigliato per":[{"Pranzo":true},{"Cena":true},{"Mangiare da soli":true}],"Accessibilità":[{"Bagno accessibile in sedia a rotelle":true},{"Ingresso accessibile in sedia a rotelle":true},{"Parcheggio accessibile in sedia a rotelle":true},{"Tavoli accessibili in sedia a rotelle":true}],"Proposte":[{"Alcolici":true},{"Assaggi":true},{"Birra":true},{"Caffè":true},{"Cibo sano":true},{"Pasto veloce":true},{"Superalcolici":true},{"Vino":true}],"Ristorazione":[{"Pranzo":true},{"Cena":true},{"Dessert":true},{"Servizio al tavolo":true}],"Servizi":[{"Toilette":true}],"Ambiente":[{"Casual":true},{"Tranquillo":true}],"Frequentazione":[{"Gruppi":true}],"Pianificazione":[{"Accetta prenotazioni":true}],"Pagamenti":[{"Carte di credito":true},{"Carte di debito":true},{"PagamentI mobile NFC":true}],"Bambini":[{"Adatto ai bambini":true}],"Parcheggio":[{"Parcheggio gratuito":true},{"Parcheggio in strada gratuito":true}]};
+
+    // ✅ Pills categorie menu (se presenti) + click scroll
+    const pillsWrap = document.getElementById('menuCatPills');
+    const menuCatPills = pillsWrap ? Array.from(pillsWrap.querySelectorAll('.pill')) : [];
+
+    if(menuCatPills.length){
+      menuCatPills[0].classList.add('active');
+      menuCatPills.forEach(p => p.addEventListener('click', () => {
+        menuCatPills.forEach(x => x.classList.remove('active'));
+        p.classList.add('active');
+        const id = p.dataset.target;
+        const el = document.getElementById(id);
+        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      }, {passive:true}));
+    }
+
+    // ✅ Scrollspy categorie: quando scrolli a mano, attiva la pill corretta
+    (function initMenuScrollSpy(){
+      const pillsWrap = document.getElementById('menuCatPills');
+      if (!pillsWrap) return;
+
+      const pills = Array.from(pillsWrap.querySelectorAll('.pill'));
+      const sections = Array.from(document.querySelectorAll('.menu-cat[id]'));
+      if (!pills.length || !sections.length) return;
+
+      const pillById = new Map(pills.map(p => [p.dataset.target, p]));
+
+      let lock = false; // evita flicker subito dopo click su pill
+
+      function setActive(id){
+        const p = pillById.get(id);
+        if (!p) return;
+        pills.forEach(x => x.classList.remove('active'));
+        p.classList.add('active');
+        p.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      pills.forEach(p => {
+        p.addEventListener('click', () => {
+          lock = true;
+          setTimeout(() => { lock = false; }, 600);
+        }, { passive: true });
+      });
+
+      function getTopOffset(){
+        const header = document.querySelector('.header');
+        const pillbar = document.querySelector('#section-menu .pillbar') || document.querySelector('.pillbar');
+        const h = (header?.offsetHeight || 64);
+        const p = (pillbar?.offsetHeight || 56);
+        return h + p + 12;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        if (lock) return;
+
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a,b) => (a.boundingClientRect.top - b.boundingClientRect.top));
+
+        if (!visible.length) return;
+
+        const id = visible[0].target.id;
+        setActive(id);
+      }, {
+        root: null,
+        rootMargin: `-${getTopOffset()}px 0px -65% 0px`,
+        threshold: [0.01, 0.1]
+      });
+
+      sections.forEach(s => observer.observe(s));
+    })();
+
+    function scrollToId(id){
+      document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+    }
+    function openModal(name){
+      document.getElementById('modal-' + name).style.display = 'block';
+    }
+    function closeModal(name){
+      document.getElementById('modal-' + name).style.display = 'none';
+    }
+    document.getElementById('modal-contacts').addEventListener('click', (e) => {
+      if(e.target.id === 'modal-contacts') closeModal('contacts');
+    });
+
+    function escapeHtml(s){
+      return String(s ?? '')
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#039;");
+    }
+
+    const hoursEl = document.getElementById('hours');
+    if(Array.isArray(openingHours) && openingHours.length){
+      hoursEl.innerHTML = openingHours.map(h => `
+        <div class="info-row" style="margin-bottom:10px;">
+          <div class="i">🕒</div>
+          <div class="t">
+            <div class="label">${escapeHtml(h.day || '')}</div>
+            <div class="value">${escapeHtml(h.hours || '')}</div>
+          </div>
+        </div>`
+      ).join('');
+    } else {
+      hoursEl.innerHTML = `<p class="muted" style="text-align:center;">Orari non disponibili</p>`;
+    }
+
+    const chipsEl = document.getElementById('chips');
+    const chips = (function extractTrueFlags(info){
+      const out = [];
+      if(!info || typeof info !== 'object') return out;
+      for(const section of Object.keys(info)){
+        const arr = info[section];
+        if(!Array.isArray(arr)) continue;
+        for(const obj of arr){
+          if(!obj || typeof obj !== 'object') continue;
+          for(const k of Object.keys(obj)){
+            if(obj[k] === true) out.push(k);
+          }
+        }
+      }
+      return Array.from(new Set(out));
+    })(additionalInfo);
+
+    if(chips.length){
+      chipsEl.innerHTML = chips.slice(0, 24).map(x => `<span class="chip">✅ ${escapeHtml(x)}</span>`).join('');
+    } else {
+      chipsEl.innerHTML = `<p class="muted" style="text-align:center;">Informazioni aggiuntive non disponibili</p>`;
+    }
+
+    function sharePage(){
+      const url = window.location.href;
+      if(navigator.share){
+        navigator.share({title: document.title, url}).catch(()=>{});
+      } else {
+        navigator.clipboard?.writeText(url);
+        alert('Link copiato!');
+      }
+    }
+  </script>
+
+</body>
+</html>
